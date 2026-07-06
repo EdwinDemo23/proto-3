@@ -1,0 +1,2204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maritime Connect 360 — Every Maritime Operation Deserves the Right Product</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;350;400;480;500;540;600;700&display=swap" rel="stylesheet" />
+<style>
+/* ─── DESIGN TOKENS (Figma System) ─────────────────────────────────────── */
+:root {
+  --ink: #000000;
+  --canvas: #ffffff;
+  --inverse-canvas: #000000;
+  --inverse-ink: #ffffff;
+  --hairline: #e6e6e6;
+  --hairline-soft: #f1f1f1;
+  --surface-soft: #f7f7f5;
+  --block-lime: #dceeb1;
+  --block-lilac: #c5b0f4;
+  --block-cream: #f4ecd6;
+  --block-pink: #efd4d4;
+  --block-mint: #c8e6cd;
+  --block-coral: #f3c9b6;
+  --block-navy: #1f1d3d;
+  --accent-magenta: #ff3d8b;
+  --semantic-success: #1ea64a;
+  --r-xs: 2px; --r-sm: 6px; --r-md: 8px; --r-lg: 24px;
+  --r-xl: 32px; --r-pill: 50px; --r-full: 9999px;
+  --sp-xxs: 4px; --sp-xs: 8px; --sp-sm: 12px; --sp-md: 16px;
+  --sp-lg: 24px; --sp-xl: 32px; --sp-xxl: 48px; --sp-section: 96px;
+  --font: 'Inter', system-ui, sans-serif;
+  --nav-h: 64px;
+  --max-w: 1200px;
+}
+
+/* ─── RESET ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font); color: var(--ink); background: var(--canvas); overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+button { font-family: var(--font); cursor: pointer; border: none; background: none; }
+img { display: block; max-width: 100%; }
+
+/* ─── UTILITIES ──────────────────────────────────────────────────────────── */
+.container { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--sp-xl); }
+.eyebrow {
+  font-family: var(--font); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.5;
+}
+.tag-line {
+  font-size: 12px; font-weight: 500; letter-spacing: 0.06em;
+  text-transform: uppercase; opacity: 0.5;
+}
+
+/* BUTTONS */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--ink); color: var(--canvas);
+  font-size: 15px; font-weight: 500; letter-spacing: -0.01em;
+  padding: 10px 22px; border-radius: var(--r-pill);
+  transition: opacity 0.15s, transform 0.15s;
+  white-space: nowrap;
+}
+.btn-primary:hover { opacity: 0.82; transform: translateY(-1px); }
+
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--canvas); color: var(--ink);
+  font-size: 15px; font-weight: 500; letter-spacing: -0.01em;
+  padding: 9px 20px; border-radius: var(--r-pill);
+  border: 1.5px solid var(--hairline);
+  transition: border-color 0.15s, transform 0.15s;
+  white-space: nowrap;
+}
+.btn-secondary:hover { border-color: var(--ink); transform: translateY(-1px); }
+
+.btn-inverse {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--canvas); color: var(--ink);
+  font-size: 15px; font-weight: 500; letter-spacing: -0.01em;
+  padding: 10px 22px; border-radius: var(--r-pill);
+  transition: opacity 0.15s, transform 0.15s;
+  white-space: nowrap;
+}
+.btn-inverse:hover { opacity: 0.85; }
+
+.btn-ghost-inverse {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: transparent; color: var(--inverse-ink);
+  font-size: 15px; font-weight: 500;
+  padding: 9px 20px; border-radius: var(--r-pill);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  transition: border-color 0.15s;
+}
+.btn-ghost-inverse:hover { border-color: rgba(255,255,255,0.7); }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   1. NAVIGATION
+═══════════════════════════════════════════════════════════════════════════ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--hairline);
+  height: var(--nav-h);
+}
+.nav-inner {
+  display: flex; align-items: center; height: var(--nav-h);
+  max-width: var(--max-w); margin: 0 auto; padding: 0 var(--sp-xl);
+  gap: var(--sp-xl);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+  font-size: 16px; font-weight: 700; letter-spacing: -0.03em;
+}
+.nav-logo-mark {
+  width: 32px; height: 32px; background: var(--ink); border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--canvas); font-size: 11px; font-weight: 800; letter-spacing: -0.02em;
+}
+.nav-links {
+  display: flex; align-items: center; gap: 4px; flex: 1;
+}
+.nav-item { position: relative; }
+.nav-link {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 14px; font-weight: 450; letter-spacing: -0.01em;
+  padding: 6px 10px; border-radius: var(--r-sm);
+  transition: background 0.12s;
+  cursor: pointer;
+}
+.nav-link:hover { background: var(--surface-soft); }
+.nav-link svg { width: 12px; height: 12px; opacity: 0.5; transition: transform 0.2s; }
+.nav-item.open .nav-link svg { transform: rotate(180deg); }
+
+/* Mega menu */
+.mega-menu {
+  position: absolute; top: calc(100% + 8px); left: -16px;
+  background: var(--canvas); border: 1px solid var(--hairline);
+  border-radius: var(--r-lg); padding: var(--sp-lg);
+  width: 440px; box-shadow: 0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+  opacity: 0; visibility: hidden; transform: translateY(-6px);
+  transition: opacity 0.18s, transform 0.18s, visibility 0.18s;
+}
+.nav-item.open .mega-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+.mega-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.mega-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px; border-radius: var(--r-md);
+  transition: background 0.12s; cursor: pointer;
+}
+.mega-item:hover { background: var(--surface-soft); }
+.mega-icon {
+  width: 36px; height: 36px; border-radius: var(--r-sm); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; letter-spacing: 0;
+}
+.mega-icon.bqs { background: var(--block-lime); color: var(--ink); }
+.mega-icon.vcs { background: var(--block-lilac); color: var(--ink); }
+.mega-icon.vi  { background: var(--block-mint);  color: var(--ink); }
+.mega-icon.gs  { background: var(--block-coral); color: var(--ink); }
+.mega-item-title { font-size: 13px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 2px; }
+.mega-item-desc  { font-size: 12px; opacity: 0.55; line-height: 1.4; }
+.mega-footer {
+  margin-top: var(--sp-sm); padding-top: var(--sp-sm);
+  border-top: 1px solid var(--hairline-soft);
+  font-size: 13px; font-weight: 500;
+  display: flex; align-items: center; gap: 6px; opacity: 0.65;
+  cursor: pointer; transition: opacity 0.12s;
+}
+.mega-footer:hover { opacity: 1; }
+
+.nav-actions { display: flex; align-items: center; gap: var(--sp-sm); margin-left: auto; }
+
+/* Hamburger */
+.nav-toggle {
+  display: none; flex-direction: column; gap: 4px;
+  padding: 8px; cursor: pointer;
+}
+.nav-toggle span {
+  display: block; width: 20px; height: 1.5px;
+  background: var(--ink); transition: all 0.2s;
+}
+
+/* Mobile nav overlay */
+.nav-mobile {
+  display: none; position: fixed; inset: 0; top: var(--nav-h);
+  background: var(--canvas); z-index: 999; overflow-y: auto;
+  padding: var(--sp-xl);
+}
+.nav-mobile.open { display: block; }
+.nav-mobile a, .nav-mobile button {
+  display: block; width: 100%; text-align: left;
+  padding: 14px 0; font-size: 20px; font-weight: 500;
+  border-bottom: 1px solid var(--hairline-soft);
+}
+.nav-mobile .btns { display: flex; flex-direction: column; gap: 10px; margin-top: var(--sp-xl); }
+.nav-mobile .btns .btn-primary, .nav-mobile .btns .btn-secondary { justify-content: center; width: 100%; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   2. HERO
+═══════════════════════════════════════════════════════════════════════════ */
+.hero {
+  min-height: 100vh; display: flex; align-items: center;
+  padding-top: var(--nav-h); position: relative; overflow: hidden;
+  background: var(--canvas);
+}
+.hero-inner {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; position: relative; z-index: 2;
+  padding: var(--sp-section) var(--sp-xl);
+  max-width: var(--max-w); margin: 0 auto; width: 100%;
+}
+.hero h1 {
+  font-size: clamp(40px, 6vw, 78px); font-weight: 340; line-height: 1.04;
+  letter-spacing: -0.03em; max-width: 820px; margin-bottom: var(--sp-xl);
+}
+.hero h1 em { font-style: normal; position: relative; }
+.hero-sub {
+  font-size: clamp(16px, 1.8vw, 19px); font-weight: 350; line-height: 1.55;
+  letter-spacing: -0.01em; max-width: 560px; opacity: 0.65; margin-bottom: var(--sp-xxl);
+}
+.hero-btns { display: flex; gap: var(--sp-sm); margin-bottom: var(--sp-xl); flex-wrap: wrap; justify-content: center; }
+.hero-trust {
+  display: flex; gap: var(--sp-xl); align-items: center; flex-wrap: wrap; justify-content: center;
+}
+.hero-trust span {
+  font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px;
+  opacity: 0.55;
+}
+.hero-trust span::before { content: '✓'; opacity: 1; color: var(--semantic-success); font-weight: 700; }
+
+/* Floating app logos */
+.hero-floats {
+  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  display: flex; align-items: center; justify-content: center;
+}
+.float-logo {
+  position: absolute; display: flex; flex-direction: column;
+  align-items: center; gap: 8px; pointer-events: all; cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.float-logo:hover { transform: scale(1.1) translateY(-4px) !important; z-index: 10; }
+.float-card {
+  width: 64px; height: 64px; border-radius: var(--r-lg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800; letter-spacing: -0.01em;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  transition: box-shadow 0.2s;
+}
+.float-logo:hover .float-card { box-shadow: 0 8px 32px rgba(0,0,0,0.18); }
+.float-label { font-size: 10px; font-weight: 600; letter-spacing: 0.04em; opacity: 0.6; }
+
+/* Floating tooltip on hover */
+.float-logo .tooltip {
+  position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(4px);
+  background: var(--ink); color: var(--canvas); border-radius: var(--r-md);
+  padding: 8px 14px; font-size: 12px; font-weight: 500;
+  white-space: nowrap; opacity: 0; pointer-events: none;
+  transition: opacity 0.18s, transform 0.18s; margin-bottom: 8px;
+}
+.float-logo:hover .tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.float-bqs  { top: 22%; left: 12%; animation: floatA 6s ease-in-out infinite; }
+.float-vi   { top: 28%; right: 12%; animation: floatB 7s ease-in-out infinite; }
+.float-vcs  { bottom: 30%; left: 18%; animation: floatC 5.5s ease-in-out infinite; }
+.float-gs   { bottom: 26%; right: 16%; animation: floatA 6.5s ease-in-out infinite 1s; }
+
+@keyframes floatA { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+@keyframes floatB { 0%,100%{transform:translateY(-6px)} 50%{transform:translateY(6px)} }
+@keyframes floatC { 0%,100%{transform:translateY(4px)} 50%{transform:translateY(-8px)} }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   3. CHALLENGES
+═══════════════════════════════════════════════════════════════════════════ */
+.section-challenges {
+  padding: var(--sp-section) var(--sp-xl);
+}
+.color-block-lime {
+  background: var(--block-lime); border-radius: var(--r-xl);
+  padding: var(--sp-xxl) var(--sp-xxl) var(--sp-xl);
+  max-width: var(--max-w); margin: 0 auto;
+}
+.section-header { margin-bottom: var(--sp-xxl); }
+.section-eyebrow { margin-bottom: var(--sp-md); }
+.section-header h2 {
+  font-size: clamp(30px, 4vw, 52px); font-weight: 340; line-height: 1.1;
+  letter-spacing: -0.03em; margin-bottom: var(--sp-lg);
+}
+.section-header p {
+  font-size: 17px; font-weight: 350; line-height: 1.55;
+  letter-spacing: -0.01em; opacity: 0.65; max-width: 580px;
+}
+.challenges-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-sm);
+  margin-bottom: var(--sp-xxl);
+}
+.challenge-card {
+  background: rgba(255,255,255,0.55); border-radius: var(--r-lg);
+  padding: var(--sp-xl) var(--sp-xl) var(--sp-lg); border: 1px solid rgba(0,0,0,0.06);
+  transition: background 0.18s;
+}
+.challenge-card:hover { background: rgba(255,255,255,0.8); }
+.challenge-icon {
+  width: 40px; height: 40px; border-radius: var(--r-md);
+  background: var(--ink); color: var(--canvas);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: var(--sp-lg); font-size: 18px;
+}
+.challenge-card h3 { font-size: 16px; font-weight: 650; letter-spacing: -0.02em; margin-bottom: 8px; }
+.challenge-card p { font-size: 14px; line-height: 1.55; opacity: 0.65; }
+.challenges-footer { text-align: center; padding-top: var(--sp-lg); }
+.challenges-footer p { font-size: 16px; font-weight: 500; opacity: 0.7; margin-bottom: 6px; }
+.arrow-down { font-size: 20px; opacity: 0.4; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   4. PRODUCTS
+═══════════════════════════════════════════════════════════════════════════ */
+.section-products { padding: var(--sp-section) 0; }
+.section-products .container { }
+.products-header {
+  text-align: center; margin-bottom: 72px;
+  max-width: 680px; margin-left: auto; margin-right: auto;
+  padding: 0 var(--sp-xl);
+}
+.products-header h2 {
+  font-size: clamp(30px, 4vw, 52px); font-weight: 340; line-height: 1.1;
+  letter-spacing: -0.03em; margin-bottom: var(--sp-lg);
+}
+.products-header p { font-size: 17px; opacity: 0.65; line-height: 1.55; }
+
+/* Alternating product showcase */
+.product-item {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  align-items: stretch; max-width: var(--max-w); margin: 0 auto;
+  border-top: 1px solid var(--hairline);
+  padding: 64px var(--sp-xl);
+}
+.product-item:last-child { border-bottom: 1px solid var(--hairline); }
+.product-item.reverse .product-info { order: 2; }
+.product-item.reverse .product-visual { order: 1; }
+.product-info { padding-right: 64px; display: flex; flex-direction: column; justify-content: center; }
+.product-item.reverse .product-info { padding-right: 0; padding-left: 64px; }
+.product-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 12px; border-radius: var(--r-pill);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; margin-bottom: var(--sp-xl); width: fit-content;
+}
+.badge-bqs { background: var(--block-lime); }
+.badge-vcs { background: var(--block-lilac); }
+.badge-vi  { background: var(--block-mint); }
+.badge-gs  { background: var(--block-coral); }
+.product-info h3 {
+  font-size: clamp(26px, 3vw, 42px); font-weight: 340; line-height: 1.1;
+  letter-spacing: -0.03em; margin-bottom: var(--sp-sm);
+}
+.product-tagline { font-size: 16px; opacity: 0.5; font-weight: 450; margin-bottom: var(--sp-lg); }
+.product-desc {
+  font-size: 16px; line-height: 1.6; opacity: 0.7; margin-bottom: var(--sp-xl);
+}
+.product-features { margin-bottom: var(--sp-xxl); }
+.product-features li {
+  font-size: 14px; font-weight: 450; line-height: 1.55;
+  padding: 8px 0; border-bottom: 1px solid var(--hairline-soft);
+  display: flex; align-items: center; gap: 10px;
+}
+.product-features li::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--ink); flex-shrink: 0; opacity: 0.4;
+}
+.product-features li:last-child { border-bottom: none; }
+
+.product-visual {
+  border-radius: var(--r-xl); overflow: hidden;
+  min-height: 360px; display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.product-screen {
+  width: 100%; height: 100%; min-height: 360px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--r-xl); padding: var(--sp-xxl);
+  flex-direction: column; gap: var(--sp-lg);
+}
+.screen-bqs { background: var(--block-lime); }
+.screen-vcs { background: var(--block-lilac); }
+.screen-vi  { background: var(--block-mint); }
+.screen-gs  { background: var(--block-coral); }
+
+.screen-widget {
+  background: rgba(255,255,255,0.6); border-radius: var(--r-lg);
+  backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.8);
+  padding: var(--sp-xl); width: 100%;
+}
+.screen-widget-header {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; opacity: 0.5; margin-bottom: var(--sp-md);
+}
+.screen-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.06);
+  font-size: 13px;
+}
+.screen-row:last-child { border-bottom: none; }
+.screen-badge {
+  font-size: 11px; font-weight: 600; padding: 2px 8px;
+  border-radius: var(--r-pill); background: rgba(0,0,0,0.08);
+}
+.screen-badge.ok { background: #d4f0dc; color: #1a7a3a; }
+.screen-badge.warn { background: #fef2cc; color: #8a6200; }
+.screen-num { font-size: 28px; font-weight: 700; letter-spacing: -0.03em; }
+.screen-label { font-size: 12px; opacity: 0.5; }
+.screen-bar-wrap { background: rgba(0,0,0,0.08); height: 6px; border-radius: 3px; overflow: hidden; }
+.screen-bar { height: 100%; background: var(--ink); border-radius: 3px; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   5. PRODUCT PREVIEW
+═══════════════════════════════════════════════════════════════════════════ */
+.section-preview { padding: var(--sp-section) var(--sp-xl); }
+.color-block-lilac {
+  background: var(--block-lilac); border-radius: var(--r-xl);
+  padding: var(--sp-xxl); max-width: var(--max-w); margin: 0 auto;
+}
+.preview-header { text-align: center; margin-bottom: var(--sp-xxl); }
+.preview-header h2 {
+  font-size: clamp(28px, 3.5vw, 46px); font-weight: 340;
+  letter-spacing: -0.03em; margin-bottom: var(--sp-md);
+}
+.preview-tabs {
+  display: flex; gap: 6px; justify-content: center;
+  flex-wrap: wrap; margin-bottom: var(--sp-xxl);
+}
+.preview-tab {
+  padding: 8px 20px; border-radius: var(--r-pill);
+  font-size: 14px; font-weight: 500; letter-spacing: -0.01em;
+  border: 1.5px solid rgba(0,0,0,0.15); background: transparent;
+  transition: all 0.18s; cursor: pointer;
+}
+.preview-tab.active {
+  background: var(--ink); color: var(--canvas); border-color: var(--ink);
+}
+.preview-tab:not(.active):hover { background: rgba(0,0,0,0.06); }
+.preview-panels { }
+.preview-panel { display: none; }
+.preview-panel.active { display: grid; grid-template-columns: 1fr 1.6fr; gap: var(--sp-xxl); align-items: start; }
+.preview-info h3 { font-size: 24px; font-weight: 540; letter-spacing: -0.02em; margin-bottom: var(--sp-md); }
+.preview-info p { font-size: 15px; line-height: 1.6; opacity: 0.7; margin-bottom: var(--sp-xl); }
+.preview-caps { margin-bottom: var(--sp-xl); }
+.preview-caps li {
+  font-size: 14px; font-weight: 450; padding: 10px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  display: flex; align-items: center; gap: 10px;
+}
+.preview-caps li:last-child { border-bottom: none; }
+.preview-caps li::before {
+  content: ''; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--ink); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M2 6l3 3 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: center;
+}
+.preview-screen-area {
+  background: rgba(255,255,255,0.5); border-radius: var(--r-xl);
+  min-height: 360px; display: flex; align-items: center; justify-content: center;
+  padding: var(--sp-xxl); border: 1px solid rgba(255,255,255,0.8);
+}
+.mock-ui { width: 100%; }
+.mock-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: var(--sp-lg);
+}
+.mock-title { font-size: 15px; font-weight: 700; letter-spacing: -0.02em; }
+.mock-controls { display: flex; gap: 6px; }
+.mock-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(0,0,0,0.15);
+}
+.mock-table { width: 100%; border-collapse: collapse; }
+.mock-table th {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; opacity: 0.4; padding: 6px 8px;
+  border-bottom: 1px solid rgba(0,0,0,0.1); text-align: left;
+}
+.mock-table td {
+  font-size: 13px; padding: 10px 8px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.mock-metric {
+  text-align: center; padding: var(--sp-xl);
+}
+.mock-metric-num { font-size: 48px; font-weight: 700; letter-spacing: -0.04em; }
+.mock-metric-label { font-size: 13px; opacity: 0.5; margin-top: 4px; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   6. OPERATIONS / WHO WE SERVE
+═══════════════════════════════════════════════════════════════════════════ */
+.section-ops { padding: var(--sp-section) var(--sp-xl); }
+.ops-inner { max-width: var(--max-w); margin: 0 auto; }
+.ops-header { margin-bottom: var(--sp-xxl); }
+.ops-header h2 {
+  font-size: clamp(28px, 3.5vw, 46px); font-weight: 340;
+  letter-spacing: -0.03em; margin-bottom: var(--sp-md);
+}
+.ops-header p { font-size: 17px; opacity: 0.65; line-height: 1.55; max-width: 540px; }
+.ops-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-sm);
+}
+.ops-card {
+  border: 1px solid var(--hairline); border-radius: var(--r-xl);
+  padding: var(--sp-xxl) var(--sp-xl) var(--sp-xl);
+  transition: border-color 0.18s, transform 0.18s;
+}
+.ops-card:hover { border-color: var(--ink); transform: translateY(-3px); }
+.ops-card-role {
+  font-size: 18px; font-weight: 650; letter-spacing: -0.02em;
+  margin-bottom: var(--sp-xl);
+}
+.ops-section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; opacity: 0.4; margin-bottom: 10px;
+}
+.ops-challenges { margin-bottom: var(--sp-xl); }
+.ops-challenge-item { font-size: 13px; line-height: 1.5; opacity: 0.65; padding: 4px 0; }
+.ops-products { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: var(--sp-lg); }
+.ops-product-tag {
+  font-size: 11px; font-weight: 600; padding: 3px 10px;
+  border-radius: var(--r-pill); background: var(--surface-soft);
+}
+.ops-outcome { font-size: 13px; font-weight: 550; color: var(--semantic-success); }
+.ops-arrow { font-size: 14px; opacity: 0.3; margin: 8px 0; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   7. TRUST / SOCIAL PROOF
+═══════════════════════════════════════════════════════════════════════════ */
+.section-trust { padding: var(--sp-section) var(--sp-xl); }
+.color-block-cream {
+  background: var(--block-cream); border-radius: var(--r-xl);
+  padding: var(--sp-xxl); max-width: var(--max-w); margin: 0 auto;
+}
+.trust-header { text-align: center; margin-bottom: var(--sp-xxl); }
+.trust-header h2 {
+  font-size: clamp(28px, 3.5vw, 46px); font-weight: 340;
+  letter-spacing: -0.03em; margin-bottom: var(--sp-md);
+}
+.trust-header p { font-size: 17px; opacity: 0.65; }
+.logos-strip {
+  display: flex; flex-wrap: wrap; gap: var(--sp-md);
+  justify-content: center; margin-bottom: var(--sp-xxl);
+}
+.logo-pill {
+  background: rgba(255,255,255,0.6); border: 1px solid rgba(0,0,0,0.1);
+  border-radius: var(--r-pill); padding: 10px 24px;
+  font-size: 13px; font-weight: 700; letter-spacing: 0.04em;
+  opacity: 0.65;
+}
+.case-studies { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-sm); }
+.case-card {
+  background: rgba(255,255,255,0.6); border-radius: var(--r-xl);
+  padding: var(--sp-xl); border: 1px solid rgba(255,255,255,0.8);
+  display: flex; flex-direction: column; gap: var(--sp-md);
+}
+.case-tag {
+  display: inline-flex; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.45;
+}
+.case-q {
+  font-size: 15px; font-weight: 650; line-height: 1.4; letter-spacing: -0.01em;
+}
+.case-body { font-size: 13px; line-height: 1.6; opacity: 0.65; }
+.case-metrics { display: flex; gap: var(--sp-sm); flex-wrap: wrap; padding-top: var(--sp-md); border-top: 1px solid rgba(0,0,0,0.1); }
+.case-metric { }
+.case-metric-num { font-size: 22px; font-weight: 700; letter-spacing: -0.03em; color: var(--semantic-success); }
+.case-metric-label { font-size: 11px; opacity: 0.55; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   8. ENTERPRISE PLATFORM
+═══════════════════════════════════════════════════════════════════════════ */
+.section-platform { padding: var(--sp-section) var(--sp-xl); }
+.color-block-navy {
+  background: var(--block-navy); border-radius: var(--r-xl);
+  padding: var(--sp-xxl); max-width: var(--max-w); margin: 0 auto;
+  color: var(--inverse-ink);
+}
+.platform-header { text-align: center; margin-bottom: var(--sp-xxl); }
+.platform-header h2 {
+  font-size: clamp(28px, 3.5vw, 46px); font-weight: 340;
+  letter-spacing: -0.03em; margin-bottom: var(--sp-md);
+}
+.platform-header p { font-size: 17px; opacity: 0.6; }
+.platform-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-sm); }
+.platform-card {
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--r-xl); padding: var(--sp-xl) var(--sp-lg) var(--sp-lg);
+  transition: background 0.18s;
+}
+.platform-card:hover { background: rgba(255,255,255,0.12); }
+.platform-icon {
+  width: 40px; height: 40px; border-radius: var(--r-md);
+  background: rgba(255,255,255,0.12); display: flex; align-items: center;
+  justify-content: center; font-size: 20px; margin-bottom: var(--sp-md);
+}
+.platform-card h3 { font-size: 15px; font-weight: 650; margin-bottom: 6px; letter-spacing: -0.01em; }
+.platform-card p { font-size: 13px; line-height: 1.55; opacity: 0.5; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   9. IMPLEMENTATION JOURNEY
+═══════════════════════════════════════════════════════════════════════════ */
+.section-journey { padding: var(--sp-section) var(--sp-xl); }
+.journey-inner { max-width: var(--max-w); margin: 0 auto; }
+.journey-header { margin-bottom: 64px; }
+.journey-header h2 {
+  font-size: clamp(28px, 3.5vw, 46px); font-weight: 340;
+  letter-spacing: -0.03em; margin-bottom: var(--sp-md);
+}
+.journey-header p { font-size: 17px; opacity: 0.65; line-height: 1.55; max-width: 500px; }
+.journey-steps {
+  display: flex; gap: 0; position: relative;
+}
+.journey-steps::before {
+  content: ''; position: absolute; top: 20px; left: 20px; right: 20px; height: 1px;
+  background: var(--hairline); z-index: 0;
+}
+.journey-step {
+  flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;
+  gap: var(--sp-md); position: relative; z-index: 1; padding: 0 var(--sp-sm);
+}
+.journey-dot {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--canvas); border: 2px solid var(--hairline);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
+  transition: all 0.2s;
+}
+.journey-step.active .journey-dot,
+.journey-step.done .journey-dot {
+  background: var(--ink); border-color: var(--ink); color: var(--canvas);
+}
+.journey-step-title { font-size: 13px; font-weight: 650; letter-spacing: -0.01em; }
+.journey-step-desc { font-size: 12px; line-height: 1.5; opacity: 0.55; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   10. PRICING
+═══════════════════════════════════════════════════════════════════════════ */
+.section-pricing { padding: var(--sp-section) var(--sp-xl); }
+.color-block-mint {
+  background: var(--block-mint); border-radius: var(--r-xl);
+  padding: var(--sp-xxl); max-width: var(--max-w); margin: 0 auto;
+}
+.pricing-header { text-align: center; margin-bottom: var(--sp-xxl); }
+.pricing-header h2 {
+  font-size: clamp(28px, 3.5vw, 46px); font-weight: 340;
+  letter-spacing: -0.03em; margin-bottom: var(--sp-md);
+}
+.pricing-steps-nav {
+  display: flex; align-items: center; gap: var(--sp-lg);
+  margin-bottom: var(--sp-xxl);
+}
+.pricing-step-label {
+  font-size: 13px; font-weight: 600; opacity: 0.4; display: flex; align-items: center; gap: 6px;
+}
+.pricing-step-label.active { opacity: 1; }
+.pricing-step-label .num {
+  width: 24px; height: 24px; border-radius: 50%; background: rgba(0,0,0,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+}
+.pricing-step-label.active .num { background: var(--ink); color: var(--canvas); }
+.pricing-divider { flex: 1; height: 1px; background: rgba(0,0,0,0.15); }
+
+.pricing-step { display: none; }
+.pricing-step.active { display: block; }
+.pricing-step h3 { font-size: 20px; font-weight: 650; letter-spacing: -0.02em; margin-bottom: var(--sp-xl); }
+.product-checkboxes { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-sm); margin-bottom: var(--sp-xl); }
+.product-check-item {
+  background: rgba(255,255,255,0.5); border: 2px solid rgba(0,0,0,0.12);
+  border-radius: var(--r-lg); padding: var(--sp-lg) var(--sp-xl);
+  cursor: pointer; transition: all 0.18s; display: flex; gap: var(--sp-md); align-items: center;
+}
+.product-check-item.selected { border-color: var(--ink); background: rgba(255,255,255,0.85); }
+.product-check-item input { display: none; }
+.check-box {
+  width: 22px; height: 22px; border-radius: var(--r-sm);
+  border: 2px solid rgba(0,0,0,0.2); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.18s;
+}
+.product-check-item.selected .check-box {
+  background: var(--ink); border-color: var(--ink); color: var(--canvas);
+}
+.check-box::after { content: ''; display: none; }
+.product-check-item.selected .check-box::after {
+  content: '✓'; display: block; font-size: 13px; color: white; font-weight: 700;
+}
+.check-info-name { font-size: 15px; font-weight: 650; letter-spacing: -0.01em; }
+.check-info-desc { font-size: 12px; opacity: 0.55; }
+
+.size-options { display: flex; gap: var(--sp-sm); margin-bottom: var(--sp-xl); flex-wrap: wrap; }
+.size-option {
+  flex: 1; min-width: 140px; background: rgba(255,255,255,0.5);
+  border: 2px solid rgba(0,0,0,0.12); border-radius: var(--r-xl);
+  padding: var(--sp-xl) var(--sp-lg); cursor: pointer; transition: all 0.18s;
+  text-align: center;
+}
+.size-option.selected { border-color: var(--ink); background: rgba(255,255,255,0.85); }
+.size-option-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.size-option-desc { font-size: 12px; opacity: 0.55; }
+
+.pricing-recommendation {
+  background: rgba(255,255,255,0.7); border-radius: var(--r-xl);
+  padding: var(--sp-xxl); border: 1px solid rgba(255,255,255,0.9);
+}
+.rec-header { margin-bottom: var(--sp-xl); }
+.rec-header h3 { font-size: 20px; font-weight: 650; letter-spacing: -0.02em; margin-bottom: 6px; }
+.rec-products { display: flex; gap: var(--sp-sm); flex-wrap: wrap; margin-bottom: var(--sp-xl); }
+.rec-product { }
+.rec-product-name { font-size: 14px; font-weight: 600; }
+.rec-product-badge {
+  font-size: 11px; padding: 2px 10px; border-radius: var(--r-pill);
+  font-weight: 600;
+}
+.rec-details { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-sm); margin-bottom: var(--sp-xl); }
+.rec-detail { }
+.rec-detail-label { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.4; margin-bottom: 4px; }
+.rec-detail-val { font-size: 15px; font-weight: 600; }
+.rec-price { font-size: 13px; opacity: 0.5; margin-bottom: var(--sp-xl); }
+.rec-actions { display: flex; gap: var(--sp-sm); flex-wrap: wrap; }
+
+.pricing-nav { display: flex; gap: var(--sp-sm); margin-top: var(--sp-xl); }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   11. FAQ
+═══════════════════════════════════════════════════════════════════════════ */
+.section-faq { padding: var(--sp-section) var(--sp-xl); }
+.faq-inner { max-width: var(--max-w); margin: 0 auto; }
+.faq-header { margin-bottom: var(--sp-xxl); }
+.faq-header h2 {
+  font-size: clamp(28px, 3.5vw, 46px); font-weight: 340;
+  letter-spacing: -0.03em; margin-bottom: var(--sp-md);
+}
+.faq-layout { display: grid; grid-template-columns: 220px 1fr; gap: 48px; }
+.faq-categories { }
+.faq-cat-btn {
+  display: block; width: 100%; text-align: left;
+  padding: 10px 14px; border-radius: var(--r-md);
+  font-size: 14px; font-weight: 500; transition: background 0.12s;
+  margin-bottom: 2px; cursor: pointer;
+}
+.faq-cat-btn.active { background: var(--ink); color: var(--canvas); }
+.faq-cat-btn:not(.active):hover { background: var(--surface-soft); }
+.faq-list { }
+.faq-item { border-bottom: 1px solid var(--hairline); }
+.faq-q {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: var(--sp-xl) 0; cursor: pointer;
+  font-size: 16px; font-weight: 550; letter-spacing: -0.01em;
+  gap: var(--sp-md);
+}
+.faq-icon {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--surface-soft); display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0; transition: transform 0.2s;
+  font-weight: 300;
+}
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+.faq-a { display: none; padding-bottom: var(--sp-xl); font-size: 15px; line-height: 1.6; opacity: 0.65; }
+.faq-item.open .faq-a { display: block; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   12. FINAL CTA
+═══════════════════════════════════════════════════════════════════════════ */
+.section-cta { padding: var(--sp-section) var(--sp-xl); }
+.color-block-ink {
+  background: var(--ink); border-radius: var(--r-xl);
+  padding: calc(var(--sp-xxl) * 1.5) var(--sp-xxl);
+  max-width: var(--max-w); margin: 0 auto;
+  color: var(--inverse-ink); text-align: center;
+}
+.color-block-ink h2 {
+  font-size: clamp(30px, 4vw, 56px); font-weight: 340;
+  letter-spacing: -0.03em; margin-bottom: var(--sp-lg);
+}
+.color-block-ink p { font-size: 18px; opacity: 0.6; line-height: 1.55; margin-bottom: var(--sp-xxl); }
+.cta-btns { display: flex; gap: var(--sp-sm); justify-content: center; flex-wrap: wrap; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   13. FOOTER
+═══════════════════════════════════════════════════════════════════════════ */
+.footer {
+  padding: var(--sp-xxl) var(--sp-xl) var(--sp-xl);
+  border-top: 1px solid var(--hairline);
+}
+.footer-inner { max-width: var(--max-w); margin: 0 auto; }
+.footer-top { display: grid; grid-template-columns: 200px repeat(5, 1fr); gap: var(--sp-xxl); margin-bottom: var(--sp-xxl); }
+.footer-brand { }
+.footer-logo { display: flex; align-items: center; gap: 8px; margin-bottom: var(--sp-md); font-size: 15px; font-weight: 700; }
+.footer-tagline { font-size: 13px; opacity: 0.5; line-height: 1.5; margin-bottom: var(--sp-lg); }
+.footer-socials { display: flex; gap: var(--sp-sm); }
+.social-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--surface-soft); display: flex; align-items: center; justify-content: center;
+  font-size: 14px; transition: background 0.12s;
+}
+.social-btn:hover { background: var(--hairline); }
+.footer-col h4 { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.4; margin-bottom: var(--sp-md); }
+.footer-col a { display: block; font-size: 14px; opacity: 0.65; padding: 4px 0; transition: opacity 0.12s; }
+.footer-col a:hover { opacity: 1; }
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: var(--sp-xl); border-top: 1px solid var(--hairline-soft);
+  flex-wrap: wrap; gap: var(--sp-md);
+}
+.footer-bottom p { font-size: 12px; opacity: 0.4; }
+.footer-legal { display: flex; gap: var(--sp-lg); }
+.footer-legal a { font-size: 12px; opacity: 0.4; transition: opacity 0.12s; }
+.footer-legal a:hover { opacity: 0.7; }
+
+/* Newsletter */
+.footer-newsletter { margin-top: var(--sp-md); }
+.newsletter-form { display: flex; gap: var(--sp-xs); }
+.newsletter-input {
+  flex: 1; padding: 8px 14px; border-radius: var(--r-pill);
+  border: 1.5px solid var(--hairline); background: var(--canvas);
+  font-size: 13px; font-family: var(--font); outline: none;
+  transition: border-color 0.15s;
+}
+.newsletter-input:focus { border-color: var(--ink); }
+.newsletter-btn {
+  padding: 8px 16px; border-radius: var(--r-pill);
+  background: var(--ink); color: var(--canvas);
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: opacity 0.15s;
+}
+.newsletter-btn:hover { opacity: 0.8; }
+
+/* Scroll reveal */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s, transform 0.5s; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .nav-links { display: none; }
+  .nav-toggle { display: flex; }
+  .challenges-grid { grid-template-columns: repeat(2, 1fr); }
+  .ops-grid { grid-template-columns: repeat(2, 1fr); }
+  .platform-grid { grid-template-columns: repeat(2, 1fr); }
+  .case-studies { grid-template-columns: 1fr 1fr; }
+  .footer-top { grid-template-columns: repeat(3, 1fr); }
+  .product-item { grid-template-columns: 1fr; gap: var(--sp-xxl); }
+  .product-info { padding-right: 0 !important; padding-left: 0 !important; }
+  .product-item.reverse .product-info { order: 1; }
+  .product-item.reverse .product-visual { order: 2; }
+  .journey-steps { flex-direction: column; }
+  .journey-steps::before { display: none; }
+  .journey-step { flex-direction: row; align-items: flex-start; text-align: left; }
+  .faq-layout { grid-template-columns: 1fr; }
+  .faq-categories { display: flex; flex-wrap: wrap; gap: 6px; }
+  .preview-panel.active { grid-template-columns: 1fr; }
+  .rec-details { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  :root { --sp-section: 64px; }
+  .challenges-grid { grid-template-columns: 1fr; }
+  .case-studies { grid-template-columns: 1fr; }
+  .ops-grid { grid-template-columns: 1fr; }
+  .platform-grid { grid-template-columns: 1fr 1fr; }
+  .footer-top { grid-template-columns: repeat(2, 1fr); }
+  .color-block-lime, .color-block-lilac, .color-block-cream,
+  .color-block-mint, .color-block-navy, .color-block-ink {
+    border-radius: 0; margin: 0 calc(-1 * var(--sp-xl));
+    padding-left: var(--sp-xl); padding-right: var(--sp-xl);
+  }
+  .float-bqs { top: 15%; left: 4%; }
+  .float-vi  { top: 15%; right: 4%; }
+  .float-vcs { bottom: 15%; left: 4%; }
+  .float-gs  { bottom: 15%; right: 4%; }
+  .float-card { width: 48px; height: 48px; }
+  .product-checkboxes { grid-template-columns: 1fr; }
+  .rec-details { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .hero h1 { font-size: 36px; }
+  .nav-actions .btn-secondary { display: none; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .hero-trust { flex-direction: column; gap: var(--sp-sm); }
+  .cta-btns { flex-direction: column; }
+  .cta-btns .btn-inverse, .cta-btns .btn-ghost-inverse { justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+  NAV
+══════════════════════════════════════════════════════ -->
+<nav class="nav" role="navigation" aria-label="Main">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo" aria-label="Maritime Connect 360 home">
+      <img src="assets/MC360logo.png" alt="MC360 logo" width="32" height="32" style="border-radius: 10px; object-fit: contain;" />
+      Maritime Connect 360
+    </a>
+
+    <ul class="nav-links" role="list">
+      <li class="nav-item" id="nav-products">
+        <div class="nav-link" tabindex="0" role="button" aria-expanded="false" aria-haspopup="true">
+          Products
+          <svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="mega-menu" role="menu">
+          <div class="mega-grid">
+            <div class="mega-item" role="menuitem" tabindex="0" onclick="scrollTo('#products')">
+              <div class="mega-icon bqs">BQS</div>
+              <div>
+                <div class="mega-item-title">Bunker Quantity Survey</div>
+                <div class="mega-item-desc">Know every drop.</div>
+              </div>
+            </div>
+            <div class="mega-item" role="menuitem" tabindex="0" onclick="scrollTo('#products')">
+              <div class="mega-icon vcs">VCS</div>
+              <div>
+                <div class="mega-item-title">Vessel Condition Survey</div>
+                <div class="mega-item-desc">Understand vessel health.</div>
+              </div>
+            </div>
+            <div class="mega-item" role="menuitem" tabindex="0" onclick="scrollTo('#products')">
+              <div class="mega-icon vi">VI</div>
+              <div>
+                <div class="mega-item-title">Vessel Inspection</div>
+                <div class="mega-item-desc">Inspect smarter.</div>
+              </div>
+            </div>
+            <div class="mega-item" role="menuitem" tabindex="0" onclick="scrollTo('#products')">
+              <div class="mega-icon gs">GS</div>
+              <div>
+                <div class="mega-item-title">Global Sanctions</div>
+                <div class="mega-item-desc">Screen with confidence.</div>
+              </div>
+            </div>
+          </div>
+          <div class="mega-footer" onclick="scrollTo('#products')">
+            Compare Products →
+          </div>
+        </div>
+      </li>
+      <li class="nav-item"><a class="nav-link" href="#ops">Solutions</a></li>
+      <li class="nav-item"><a class="nav-link" href="#ops">Industries</a></li>
+      <li class="nav-item"><a class="nav-link" href="#faq">Resources</a></li>
+      <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+      <li class="nav-item"><a class="nav-link" href="#cta">Company</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="#cta" class="btn-secondary">Book Demo</a>
+      <a href="#pricing" class="btn-primary">Start Free Trial</a>
+      <div class="nav-toggle" aria-label="Open menu" role="button" tabindex="0">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Nav Overlay -->
+<div class="nav-mobile" id="nav-mobile" aria-hidden="true">
+  <a href="#products">Products</a>
+  <a href="#ops">Solutions</a>
+  <a href="#ops">Industries</a>
+  <a href="#faq">Resources</a>
+  <a href="#pricing">Pricing</a>
+  <a href="#cta">Company</a>
+  <div class="btns">
+    <a href="#cta" class="btn-primary">Book Demo</a>
+    <a href="#pricing" class="btn-secondary">Start Free Trial</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+  HERO
+══════════════════════════════════════════════════════ -->
+<section class="hero" id="home" aria-label="Hero">
+
+  <!-- Floating product logos -->
+  <div class="hero-floats" aria-hidden="true">
+    <div class="float-logo float-bqs" style="top:22%;left:10%">
+      <div class="tooltip">Bunker Quantity Survey</div>
+      <div class="float-card" style="background:var(--block-lime);">BQS</div>
+      <span class="float-label">BUNKER</span>
+    </div>
+    <div class="float-logo float-vi" style="top:25%;right:10%">
+      <div class="tooltip">Vessel Inspection</div>
+      <div class="float-card" style="background:var(--block-mint);">VI</div>
+      <span class="float-label">INSPECT</span>
+    </div>
+    <div class="float-logo float-vcs" style="bottom:28%;left:12%">
+      <div class="tooltip">Vessel Condition Survey</div>
+      <div class="float-card" style="background:var(--block-lilac);">VCS</div>
+      <span class="float-label">CONDITION</span>
+    </div>
+    <div class="float-logo float-gs" style="bottom:24%;right:12%">
+      <div class="tooltip">Global Sanctions</div>
+      <div class="float-card" style="background:var(--block-coral);">GS</div>
+      <span class="float-label">SANCTIONS</span>
+    </div>
+  </div>
+
+  <div class="hero-inner">
+    <p class="eyebrow" style="margin-bottom:24px">Maritime Connect 360</p>
+    <h1>Every Maritime Operation<br>Deserves the<br><em>Right Product.</em></h1>
+    <p class="hero-sub">
+      Purpose-built applications that simplify inspections, surveys, compliance, and operational decision-making — designed for fleet managers, port authorities, marine surveyors, and maritime teams.
+    </p>
+    <div class="hero-btns">
+      <a href="#products" class="btn-primary">Explore Products</a>
+      <a href="#cta" class="btn-secondary">Book Demo</a>
+    </div>
+    <div class="hero-trust">
+      <span>Four Specialized Products</span>
+      <span>Enterprise Ready</span>
+      <span>90-Day Free Trial</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+  3. CHALLENGES
+══════════════════════════════════════════════════════ -->
+<section class="section-challenges" id="challenges" aria-labelledby="challenges-h2">
+  <div class="color-block-lime reveal">
+    <div class="section-header">
+      <div class="section-eyebrow eyebrow">The Problem</div>
+      <h2 id="challenges-h2">Maritime Operations Are<br>Growing More Complex.</h2>
+      <p>Disconnected systems, manual inspections, compliance pressure, and operational delays shouldn't slow your teams down.</p>
+    </div>
+    <div class="challenges-grid">
+      <div class="challenge-card">
+        <div class="challenge-icon">⛽</div>
+        <h3>Fuel Verification</h3>
+        <p>Inconsistent bunker measurement practices lead to costly disputes and compliance gaps across every delivery.</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-icon">📋</div>
+        <h3>Inspection Management</h3>
+        <p>Paper-based inspection workflows create bottlenecks, data loss, and delays in critical decision-making.</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-icon">⚖️</div>
+        <h3>Compliance</h3>
+        <p>Evolving international sanctions and regulatory requirements demand real-time screening that manual processes can't deliver.</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-icon">📁</div>
+        <h3>Documentation</h3>
+        <p>Fragmented report formats and disjointed archives make audits slow and professional reporting inconsistent.</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-icon">🚢</div>
+        <h3>Fleet Visibility</h3>
+        <p>Lack of real-time operational data means managers are always a step behind in understanding fleet-wide health.</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-icon">🔍</div>
+        <h3>Operational Risk</h3>
+        <p>Hidden risks at vessel and counterparty level accumulate silently — until an incident surfaces them publicly.</p>
+      </div>
+    </div>
+    <div class="challenges-footer">
+      <p>Every challenge deserves a specialized solution.</p>
+      <div class="arrow-down">↓</div>
+      <p style="font-size:14px;opacity:0.5;margin-top:4px">Explore our products.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+  4. PRODUCTS ⭐
+══════════════════════════════════════════════════════ -->
+<section class="section-products" id="products" aria-labelledby="products-h2">
+  <div class="products-header reveal">
+    <div class="eyebrow" style="margin-bottom:16px">Our Products</div>
+    <h2 id="products-h2">Four Products. One Connected Maritime Ecosystem.</h2>
+    <p>Each application solves a different operational challenge while working together on one secure platform.</p>
+  </div>
+
+  <!-- BQS -->
+  <div class="product-item reveal">
+    <div class="product-info">
+      <div class="product-badge badge-bqs">BQS · Bunker Quantity Survey</div>
+      <h3>Know every drop.</h3>
+      <p class="product-tagline">Fuel accuracy, at every port.</p>
+      <p class="product-desc">Digitize bunker quantity verification with accurate calculations, digital evidence capture, and standardized reporting that removes dispute risk from every delivery.</p>
+      <ul class="product-features" aria-label="BQS Features">
+        <li>Automated bunker quantity calculations with ISO-standard methods</li>
+        <li>Digital witness signatures and photo evidence capture</li>
+        <li>Real-time deviation alerts and approval workflows</li>
+        <li>One-click professional PDF survey reports</li>
+        <li>Multi-port, multi-vessel dashboard visibility</li>
+      </ul>
+      <a href="#preview" class="btn-primary">Explore Product →</a>
+    </div>
+    <div class="product-visual">
+      <div class="product-screen screen-bqs">
+        <div class="screen-widget">
+          <div class="screen-widget-header">Bunker Delivery — MV Atlantic Star</div>
+          <div class="screen-row"><span>Surveyed Volume</span><span class="screen-num" style="font-size:20px">1,842 MT</span></div>
+          <div class="screen-row"><span>BDN Quantity</span><span>1,839 MT</span></div>
+          <div class="screen-row"><span>Deviation</span><span class="screen-badge warn">+0.16%</span></div>
+          <div class="screen-row"><span>Status</span><span class="screen-badge ok">Verified</span></div>
+        </div>
+        <div class="screen-widget">
+          <div class="screen-widget-header">Monthly Accuracy Trend</div>
+          <div style="display:flex;gap:8px;align-items:flex-end;height:60px;">
+            <div style="flex:1;background:rgba(0,0,0,0.12);border-radius:4px 4px 0 0;height:55%"></div>
+            <div style="flex:1;background:rgba(0,0,0,0.12);border-radius:4px 4px 0 0;height:72%"></div>
+            <div style="flex:1;background:rgba(0,0,0,0.12);border-radius:4px 4px 0 0;height:60%"></div>
+            <div style="flex:1;background:rgba(0,0,0,0.12);border-radius:4px 4px 0 0;height:85%"></div>
+            <div style="flex:1;background:var(--ink);border-radius:4px 4px 0 0;height:92%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VCS -->
+  <div class="product-item reverse reveal">
+    <div class="product-info">
+      <div class="product-badge badge-vcs">VCS · Vessel Condition Survey</div>
+      <h3>Understand vessel health.</h3>
+      <p class="product-tagline">Structured insights, professional reports.</p>
+      <p class="product-desc">Capture vessel conditions using structured digital surveys and generate professional, board-ready reports in minutes — not days.</p>
+      <ul class="product-features" aria-label="VCS Features">
+        <li>Configurable condition survey templates per vessel type</li>
+        <li>Photo and video evidence attached directly to findings</li>
+        <li>Severity scoring and trending across survey history</li>
+        <li>Automated professional PDF report generation</li>
+        <li>Comparison across multiple vessels or survey periods</li>
+      </ul>
+      <a href="#preview" class="btn-primary">Explore Product →</a>
+    </div>
+    <div class="product-visual">
+      <div class="product-screen screen-vcs">
+        <div class="screen-widget">
+          <div class="screen-widget-header">Vessel Condition Overview</div>
+          <div class="screen-row"><span>Hull Integrity</span><span class="screen-badge ok">Good</span></div>
+          <div class="screen-row"><span>Engine Room</span><span class="screen-badge ok">Good</span></div>
+          <div class="screen-row"><span>Deck Equipment</span><span class="screen-badge warn">Monitor</span></div>
+          <div class="screen-row"><span>Safety Systems</span><span class="screen-badge ok">Compliant</span></div>
+        </div>
+        <div class="screen-widget">
+          <div class="screen-widget-header">Condition Score</div>
+          <div style="text-align:center;padding:8px 0;">
+            <div class="screen-num">8.4</div>
+            <div class="screen-label">/ 10 — Above Fleet Average</div>
+            <div style="margin-top:12px;"><div class="screen-bar-wrap"><div class="screen-bar" style="width:84%"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VI -->
+  <div class="product-item reveal">
+    <div class="product-info">
+      <div class="product-badge badge-vi">VI · Vessel Inspection</div>
+      <h3>Inspect smarter.</h3>
+      <p class="product-tagline">Digital workflows that work anywhere.</p>
+      <p class="product-desc">Replace paper inspections with intelligent digital workflows that work online and offline — keeping inspectors productive even at anchorage.</p>
+      <ul class="product-features" aria-label="Vessel Inspection Features">
+        <li>Intelligent digital checklists with branching logic</li>
+        <li>Full offline mode with automatic sync on reconnection</li>
+        <li>Real-time inspection progress visible to shore teams</li>
+        <li>Non-conformance tracking and corrective action workflows</li>
+        <li>Integration with port state control databases</li>
+      </ul>
+      <a href="#preview" class="btn-primary">Explore Product →</a>
+    </div>
+    <div class="product-visual">
+      <div class="product-screen screen-vi">
+        <div class="screen-widget">
+          <div class="screen-widget-header">Inspection Progress — Port of Rotterdam</div>
+          <div class="screen-row"><span>Navigational Equipment</span><span class="screen-badge ok">Done</span></div>
+          <div class="screen-row"><span>Cargo Systems</span><span class="screen-badge ok">Done</span></div>
+          <div class="screen-row"><span>Fire Safety</span><span class="screen-badge warn">In Progress</span></div>
+          <div class="screen-row"><span>Crew Certification</span><span>Pending</span></div>
+        </div>
+        <div class="screen-widget">
+          <div style="text-align:center;padding:4px 0;">
+            <div class="screen-num">62%</div>
+            <div class="screen-label">Inspection Complete</div>
+            <div style="margin-top:10px;"><div class="screen-bar-wrap"><div class="screen-bar" style="width:62%"></div></div></div>
+            <div style="font-size:11px;opacity:0.5;margin-top:8px;">🔴 Offline Mode Active · Syncing when connected</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GS -->
+  <div class="product-item reverse reveal">
+    <div class="product-info">
+      <div class="product-badge badge-gs">GS · Global Sanctions</div>
+      <h3>Screen with confidence.</h3>
+      <p class="product-tagline">Know who you're working with, before you begin.</p>
+      <p class="product-desc">Identify risks before operations begin with real-time sanctions and watchlist screening across OFAC, EU, UN, and 50+ global lists.</p>
+      <ul class="product-features" aria-label="Global Sanctions Features">
+        <li>Real-time screening against 50+ international sanction lists</li>
+        <li>Vessel, company, and individual name screening</li>
+        <li>Automated alerts on newly designated entities</li>
+        <li>Audit trail and compliance evidence documentation</li>
+        <li>API integration for existing ERP and chartering systems</li>
+      </ul>
+      <a href="#preview" class="btn-primary">Explore Product →</a>
+    </div>
+    <div class="product-visual">
+      <div class="product-screen screen-gs">
+        <div class="screen-widget">
+          <div class="screen-widget-header">Screening Results</div>
+          <div class="screen-row"><span>MV Golden Horizon</span><span class="screen-badge ok">Clear</span></div>
+          <div class="screen-row"><span>Operator: Harbour Inc</span><span class="screen-badge ok">Clear</span></div>
+          <div class="screen-row"><span>Charterer: Red Sea LLC</span><span class="screen-badge warn">Review</span></div>
+          <div class="screen-row"><span>Flag State: Panama</span><span class="screen-badge ok">Clear</span></div>
+        </div>
+        <div class="screen-widget">
+          <div class="screen-widget-header">Lists Checked</div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">
+            <span class="screen-badge">OFAC</span>
+            <span class="screen-badge">EU</span>
+            <span class="screen-badge">UN</span>
+            <span class="screen-badge">UK</span>
+            <span class="screen-badge">FATF</span>
+            <span class="screen-badge" style="background:var(--block-lime)">+47 more</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+  5. PRODUCT EXPERIENCE PREVIEW
+══════════════════════════════════════════════════════ -->
+<section class="section-preview" id="preview" aria-labelledby="preview-h2">
+  <div class="color-block-lilac reveal">
+    <div class="preview-header">
+      <div class="eyebrow" style="margin-bottom:16px">See It In Action</div>
+      <h2 id="preview-h2">See Every Product in Action.</h2>
+    </div>
+    <div class="preview-tabs" role="tablist" aria-label="Product Previews">
+      <button class="preview-tab active" role="tab" aria-selected="true" data-tab="bqs">Bunker Survey</button>
+      <button class="preview-tab" role="tab" aria-selected="false" data-tab="vcs">Condition</button>
+      <button class="preview-tab" role="tab" aria-selected="false" data-tab="vi">Inspection</button>
+      <button class="preview-tab" role="tab" aria-selected="false" data-tab="sanctions">Sanctions</button>
+    </div>
+    <div class="preview-panels">
+
+      <!-- BQS Panel -->
+      <div class="preview-panel active" role="tabpanel" data-panel="bqs">
+        <div class="preview-info">
+          <h3>Bunker Quantity Survey</h3>
+          <p>Eliminate disputes and manual errors in fuel delivery verification. Every survey is timestamped, witnessed, and report-ready.</p>
+          <ul class="preview-caps">
+            <li>ISO-standard automated volume calculations</li>
+            <li>Digital witness sign-off with GPS stamp</li>
+            <li>Instant PDF survey reports</li>
+          </ul>
+          <a href="#cta" class="btn-primary">Explore BQS →</a>
+        </div>
+        <div class="preview-screen-area">
+          <div class="mock-ui">
+            <div class="mock-header">
+              <span class="mock-title">BQS — Live Survey</span>
+              <div class="mock-controls"><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div></div>
+            </div>
+            <table class="mock-table">
+              <thead><tr><th>Parameter</th><th>Value</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Opening ROB</td><td>420 MT</td><td><span class="screen-badge ok">Verified</span></td></tr>
+                <tr><td>Delivered</td><td>1,842 MT</td><td><span class="screen-badge ok">Measured</span></td></tr>
+                <tr><td>Closing ROB</td><td>2,255 MT</td><td><span class="screen-badge ok">Calculated</span></td></tr>
+                <tr><td>BDN Quantity</td><td>1,839 MT</td><td><span class="screen-badge warn">+0.16%</span></td></tr>
+              </tbody>
+            </table>
+            <div style="margin-top:16px;text-align:right">
+              <button class="btn-primary" style="font-size:12px;padding:7px 16px">Generate Report</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VCS Panel -->
+      <div class="preview-panel" role="tabpanel" data-panel="vcs">
+        <div class="preview-info">
+          <h3>Vessel Condition Survey</h3>
+          <p>Structured digital surveys replace paper forms. Capture conditions, add photos, and produce professional reports in minutes.</p>
+          <ul class="preview-caps">
+            <li>Configurable survey templates per vessel class</li>
+            <li>Photo and video evidence per finding</li>
+            <li>Trend analysis across survey history</li>
+          </ul>
+          <a href="#cta" class="btn-primary">Explore VCS →</a>
+        </div>
+        <div class="preview-screen-area">
+          <div class="mock-ui">
+            <div class="mock-header">
+              <span class="mock-title">VCS — MV Pacific Breeze</span>
+              <div class="mock-controls"><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div></div>
+            </div>
+            <div class="mock-metric">
+              <div class="mock-metric-num">8.4</div>
+              <div class="mock-metric-label">Overall Condition Score — Above Average</div>
+            </div>
+            <table class="mock-table">
+              <thead><tr><th>Section</th><th>Score</th></tr></thead>
+              <tbody>
+                <tr><td>Hull & Structure</td><td>9.1</td></tr>
+                <tr><td>Engine Room</td><td>8.6</td></tr>
+                <tr><td>Deck Equipment</td><td>7.4</td></tr>
+                <tr><td>Safety Systems</td><td>8.8</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- VI Panel -->
+      <div class="preview-panel" role="tabpanel" data-panel="vi">
+        <div class="preview-info">
+          <h3>Vessel Inspection</h3>
+          <p>Digital checklists with branching logic — works offline. Shore teams see inspection progress in real time as it happens.</p>
+          <ul class="preview-caps">
+            <li>Intelligent branching checklists</li>
+            <li>Full offline mode with auto sync</li>
+            <li>Live progress visible to shore team</li>
+          </ul>
+          <a href="#cta" class="btn-primary">Explore Inspection →</a>
+        </div>
+        <div class="preview-screen-area">
+          <div class="mock-ui">
+            <div class="mock-header">
+              <span class="mock-title">Inspection · Rotterdam</span>
+              <div class="mock-controls"><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div></div>
+            </div>
+            <div class="mock-metric" style="padding:12px">
+              <div class="mock-metric-num">62%</div>
+              <div class="mock-metric-label">Complete · 2 of 5 sections done</div>
+              <div style="margin-top:12px"><div class="screen-bar-wrap"><div class="screen-bar" style="width:62%"></div></div></div>
+            </div>
+            <table class="mock-table">
+              <thead><tr><th>Section</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Nav Equipment</td><td><span class="screen-badge ok">✓ Done</span></td></tr>
+                <tr><td>Cargo Systems</td><td><span class="screen-badge ok">✓ Done</span></td></tr>
+                <tr><td>Fire Safety</td><td><span class="screen-badge warn">In Progress</span></td></tr>
+                <tr><td>Crew Certs</td><td>Pending</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sanctions Panel -->
+      <div class="preview-panel" role="tabpanel" data-panel="sanctions">
+        <div class="preview-info">
+          <h3>Global Sanctions</h3>
+          <p>Screen vessels, operators, and counterparties against 50+ live international sanction lists before any operation begins.</p>
+          <ul class="preview-caps">
+            <li>50+ live international watchlists</li>
+            <li>Vessels, individuals, and companies</li>
+            <li>Full compliance audit trail</li>
+          </ul>
+          <a href="#cta" class="btn-primary">Explore Sanctions →</a>
+        </div>
+        <div class="preview-screen-area">
+          <div class="mock-ui">
+            <div class="mock-header">
+              <span class="mock-title">Screening — MV Caspian Star</span>
+              <div class="mock-controls"><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div></div>
+            </div>
+            <table class="mock-table">
+              <thead><tr><th>Entity</th><th>Lists</th><th>Result</th></tr></thead>
+              <tbody>
+                <tr><td>Vessel</td><td>52</td><td><span class="screen-badge ok">Clear</span></td></tr>
+                <tr><td>Owner</td><td>52</td><td><span class="screen-badge ok">Clear</span></td></tr>
+                <tr><td>Operator</td><td>52</td><td><span class="screen-badge warn">Review</span></td></tr>
+                <tr><td>Flag State</td><td>52</td><td><span class="screen-badge ok">Clear</span></td></tr>
+              </tbody>
+            </table>
+            <div style="margin-top:12px;font-size:11px;opacity:0.5;text-align:center">
+              Screened in 1.4 seconds · Last updated 3 mins ago
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+  6. OPERATIONS / WHO WE SERVE
+══════════════════════════════════════════════════════ -->
+<section class="section-ops" id="ops" aria-labelledby="ops-h2">
+  <div class="ops-inner">
+    <div class="ops-header reveal">
+      <div class="eyebrow" style="margin-bottom:16px">Built For You</div>
+      <h2 id="ops-h2">Designed Around the Way<br>Maritime Teams Work.</h2>
+      <p>Purpose-built workflows for every maritime role — from fleet managers to port authorities to individual surveyors.</p>
+    </div>
+    <div class="ops-grid">
+      <div class="ops-card reveal">
+        <div class="ops-card-role">Fleet Managers</div>
+        <div class="ops-section-label">Key Challenges</div>
+        <div class="ops-challenges">
+          <div class="ops-challenge-item">• Lack of real-time fleet-wide visibility</div>
+          <div class="ops-challenge-item">• Inconsistent inspection quality across vessels</div>
+          <div class="ops-challenge-item">• Manual fuel reconciliation consuming time</div>
+        </div>
+        <div class="ops-arrow">↓</div>
+        <div class="ops-section-label">Products Used</div>
+        <div class="ops-products">
+          <span class="ops-product-tag">BQS</span>
+          <span class="ops-product-tag">Vessel Inspection</span>
+          <span class="ops-product-tag">VCS</span>
+        </div>
+        <div class="ops-arrow">↓</div>
+        <div class="ops-section-label">Outcome</div>
+        <div class="ops-outcome">↑ 40% faster reporting · Full fleet visibility</div>
+      </div>
+      <div class="ops-card reveal">
+        <div class="ops-card-role">Port Authorities</div>
+        <div class="ops-section-label">Key Challenges</div>
+        <div class="ops-challenges">
+          <div class="ops-challenge-item">• High inspection volumes with limited staff</div>
+          <div class="ops-challenge-item">• Compliance tracking across multiple berths</div>
+          <div class="ops-challenge-item">• Paper-based port state control records</div>
+        </div>
+        <div class="ops-arrow">↓</div>
+        <div class="ops-section-label">Products Used</div>
+        <div class="ops-products">
+          <span class="ops-product-tag">Vessel Inspection</span>
+          <span class="ops-product-tag">Global Sanctions</span>
+        </div>
+        <div class="ops-arrow">↓</div>
+        <div class="ops-section-label">Outcome</div>
+        <div class="ops-outcome">↑ 3× inspection throughput · Zero paper</div>
+      </div>
+      <div class="ops-card reveal">
+        <div class="ops-card-role">Marine Surveyors</div>
+        <div class="ops-section-label">Key Challenges</div>
+        <div class="ops-challenges">
+          <div class="ops-challenge-item">• Time-consuming manual calculation and reporting</div>
+          <div class="ops-challenge-item">• Field evidence collection and organization</div>
+          <div class="ops-challenge-item">• Coordinating with remote clients on findings</div>
+        </div>
+        <div class="ops-arrow">↓</div>
+        <div class="ops-section-label">Products Used</div>
+        <div class="ops-products">
+          <span class="ops-product-tag">BQS</span>
+          <span class="ops-product-tag">VCS</span>
+        </div>
+        <div class="ops-arrow">↓</div>
+        <div class="ops-section-label">Outcome</div>
+        <div class="ops-outcome">Report generation in minutes, not hours</div>
+      </div>
+      <div class="ops-card reveal">
+        <div class="ops-card-role">Ship Owners</div>
+        <div class="ops-section-label">Key Challenges</div>
+        <div class="ops-challenges">
+          <div class="ops-challenge-item">• Monitoring asset condition across a fleet</div>
+          <div class="ops-challenge-item">• Bunker cost disputes with operators</div>
+          <div class="ops-challenge-item">• Compliance exposure with sanctioned parties</div>
+        </div>
+        <div class="ops-arrow">↓</div>
+        <div class="ops-section-label">Products Used</div>
+        <div class="ops-products">
+          <span class="ops-product-tag">VCS</span>
+          <span class="ops-product-tag">BQS</span>
+          <span class="ops-product-tag">Global Sanctions</span>
+        </div>
+        <div class="ops-arrow">↓</div>
+        <div class="ops-section-label">Outcome</div>
+        <div class="ops-outcome">Full risk coverage · Reduced fuel disputes</div>
+      </div>
+      <div class="ops-card reveal">
+        <div class="ops-card-role">Terminal Operators</div>
+        <div class="ops-section-label">Key Challenges</div>
+        <div class="ops-challenges">
+          <div class="ops-challenge-item">• Vessel screening before berth allocation</div>
+          <div class="ops-challenge-item">• Fuel delivery verification at terminal</div>
+          <div class="ops-challenge-item">• Documentation gaps between operations teams</div>
+        </div>
+        <div class="ops-arrow">↓</div>
+        <div class="ops-section-label">Products Used</div>
+        <div class="ops-products">
+          <span class="ops-product-tag">Global Sanctions</span>
+          <span class="ops-product-tag">BQS</span>
+        </div>
+        <div class="ops-arrow">↓</div>
+        <div class="ops-section-label">Outcome</div>
+        <div class="ops-outcome">Secure berth operations · Audit-ready records</div>
+      </div>
+      <div class="ops-card reveal">
+        <div class="ops-card-role">Chartering Teams</div>
+        <div class="ops-section-label">Key Challenges</div>
+        <div class="ops-challenges">
+          <div class="ops-challenge-item">• Counterparty and vessel sanctions exposure</div>
+          <div class="ops-challenge-item">• Due diligence on unfamiliar operators</div>
+          <div class="ops-challenge-item">• Speed of compliance approval in fast markets</div>
+        </div>
+        <div class="ops-arrow">↓</div>
+        <div class="ops-section-label">Products Used</div>
+        <div class="ops-products">
+          <span class="ops-product-tag">Global Sanctions</span>
+        </div>
+        <div class="ops-arrow">↓</div>
+        <div class="ops-section-label">Outcome</div>
+        <div class="ops-outcome">Compliance in seconds · Confident decisions</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+  7. TRUST
+══════════════════════════════════════════════════════ -->
+<section class="section-trust" id="trust" aria-labelledby="trust-h2">
+  <div class="color-block-cream reveal">
+    <div class="trust-header">
+      <div class="eyebrow" style="margin-bottom:16px">Social Proof</div>
+      <h2 id="trust-h2">Trusted by Organizations That Keep Maritime Moving.</h2>
+      <p>Leading fleet managers, port authorities, and maritime enterprises rely on Maritime Connect 360.</p>
+    </div>
+    <div class="logos-strip" aria-label="Customer logos">
+      <div class="logo-pill">OCEAN GROUP</div>
+      <div class="logo-pill">HARBOUR LOGISTICS</div>
+      <div class="logo-pill">NORDIC MARINE</div>
+      <div class="logo-pill">PACIFIC FLEET CO</div>
+      <div class="logo-pill">ATLAS PORT AUTHORITY</div>
+      <div class="logo-pill">MERIDIAN TANKERS</div>
+      <div class="logo-pill">GLOBAL CHARTERING</div>
+      <div class="logo-pill">SEALINK OPERATIONS</div>
+    </div>
+    <div class="case-studies" aria-label="Case studies">
+      <div class="case-card reveal">
+        <div class="case-tag">Fleet Management</div>
+        <div class="case-q">How Nordic Marine eliminated bunker disputes across 34 vessels.</div>
+        <div class="case-body">Manual fuel logging created costly discrepancies and slow dispute resolution. Nordic Marine adopted BQS and standardized every bunker operation fleet-wide.</div>
+        <div class="case-metrics">
+          <div class="case-metric"><div class="case-metric-num">94%</div><div class="case-metric-label">Fewer disputes</div></div>
+          <div class="case-metric"><div class="case-metric-num">3×</div><div class="case-metric-label">Faster reporting</div></div>
+        </div>
+      </div>
+      <div class="case-card reveal">
+        <div class="case-tag">Port Authority</div>
+        <div class="case-q">How Atlas Port Authority went fully paper-free in 60 days.</div>
+        <div class="case-body">With 150+ vessel inspections monthly, the team needed a scalable digital solution. Vessel Inspection replaced all paper checklists and enabled real-time shore visibility.</div>
+        <div class="case-metrics">
+          <div class="case-metric"><div class="case-metric-num">100%</div><div class="case-metric-label">Paper eliminated</div></div>
+          <div class="case-metric"><div class="case-metric-num">60</div><div class="case-metric-label">Days to roll out</div></div>
+        </div>
+      </div>
+      <div class="case-card reveal">
+        <div class="case-tag">Chartering</div>
+        <div class="case-q">How Global Chartering screens 200+ counterparties per week instantly.</div>
+        <div class="case-body">Manual sanctions checks took hours and created approval backlogs in fast-moving freight markets. Global Sanctions reduced this to seconds per screening.</div>
+        <div class="case-metrics">
+          <div class="case-metric"><div class="case-metric-num">&lt;2s</div><div class="case-metric-label">Per screening</div></div>
+          <div class="case-metric"><div class="case-metric-num">Zero</div><div class="case-metric-label">Compliance gaps</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+  8. ENTERPRISE PLATFORM
+══════════════════════════════════════════════════════ -->
+<section class="section-platform" id="platform" aria-labelledby="platform-h2">
+  <div class="color-block-navy reveal">
+    <div class="platform-header">
+      <div class="eyebrow" style="margin-bottom:16px;opacity:0.4;color:white">Enterprise</div>
+      <h2 id="platform-h2">One Platform. Connected Experiences.</h2>
+      <p>Every Maritime Connect application shares one secure, enterprise-grade foundation.</p>
+    </div>
+    <div class="platform-grid">
+      <div class="platform-card">
+        <div class="platform-icon">🔐</div>
+        <h3>Single Sign-On</h3>
+        <p>One set of credentials across every application with SAML 2.0 and SSO support for your identity provider.</p>
+      </div>
+      <div class="platform-card">
+        <div class="platform-icon">👥</div>
+        <h3>Role-Based Access</h3>
+        <p>Fine-grained permissions by role, department, and vessel. Keep sensitive data visible only to the right people.</p>
+      </div>
+      <div class="platform-card">
+        <div class="platform-icon">🛡️</div>
+        <h3>Enterprise Security</h3>
+        <p>SOC 2 Type II certified. End-to-end encryption, penetration testing, and enterprise DLP built in.</p>
+      </div>
+      <div class="platform-card">
+        <div class="platform-icon">📝</div>
+        <h3>Audit Logs</h3>
+        <p>Immutable, timestamped audit trails for every action across every application — always regulator-ready.</p>
+      </div>
+      <div class="platform-card">
+        <div class="platform-icon">📡</div>
+        <h3>Offline Support</h3>
+        <p>Field teams stay productive at anchor or in low-connectivity ports. Data syncs automatically on reconnection.</p>
+      </div>
+      <div class="platform-card">
+        <div class="platform-icon">🔌</div>
+        <h3>API Integration</h3>
+        <p>RESTful APIs and webhooks connect Maritime Connect to your existing ERP, chartering, and fleet management systems.</p>
+      </div>
+      <div class="platform-card">
+        <div class="platform-icon">📊</div>
+        <h3>Analytics</h3>
+        <p>Operational dashboards and scheduled reports give leadership fleet-wide visibility without manual data extraction.</p>
+      </div>
+      <div class="platform-card">
+        <div class="platform-icon">☁️</div>
+        <h3>Cloud Infrastructure</h3>
+        <p>99.9% uptime SLA. Multi-region deployment with automatic failover and daily encrypted backups.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+  9. IMPLEMENTATION JOURNEY
+══════════════════════════════════════════════════════ -->
+<section class="section-journey" id="journey" aria-labelledby="journey-h2">
+  <div class="journey-inner">
+    <div class="journey-header reveal">
+      <div class="eyebrow" style="margin-bottom:16px">Getting Started</div>
+      <h2 id="journey-h2">From First Login to Fleet-Wide Adoption.</h2>
+      <p>A clear, supported path from evaluation to full operational deployment — with our team alongside you every step.</p>
+    </div>
+    <div class="journey-steps reveal" role="list" aria-label="Implementation steps">
+      <div class="journey-step done" role="listitem">
+        <div class="journey-dot">1</div>
+        <div>
+          <div class="journey-step-title">Book Demo</div>
+          <div class="journey-step-desc">See the right products for your operation</div>
+        </div>
+      </div>
+      <div class="journey-step done" role="listitem">
+        <div class="journey-dot">2</div>
+        <div>
+          <div class="journey-step-title">Product Evaluation</div>
+          <div class="journey-step-desc">Guided walkthrough with your team</div>
+        </div>
+      </div>
+      <div class="journey-step active" role="listitem">
+        <div class="journey-dot">3</div>
+        <div>
+          <div class="journey-step-title">Free Trial</div>
+          <div class="journey-step-desc">90 days, full access, no credit card</div>
+        </div>
+      </div>
+      <div class="journey-step" role="listitem">
+        <div class="journey-dot">4</div>
+        <div>
+          <div class="journey-step-title">Implementation</div>
+          <div class="journey-step-desc">Technical setup, data migration, integrations</div>
+        </div>
+      </div>
+      <div class="journey-step" role="listitem">
+        <div class="journey-dot">5</div>
+        <div>
+          <div class="journey-step-title">Training</div>
+          <div class="journey-step-desc">Role-specific onboarding for every team</div>
+        </div>
+      </div>
+      <div class="journey-step" role="listitem">
+        <div class="journey-dot">6</div>
+        <div>
+          <div class="journey-step-title">Go Live</div>
+          <div class="journey-step-desc">Dedicated support for launch week</div>
+        </div>
+      </div>
+      <div class="journey-step" role="listitem">
+        <div class="journey-dot">7</div>
+        <div>
+          <div class="journey-step-title">Scale</div>
+          <div class="journey-step-desc">Expand across teams, fleets, and products</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+  10. PRICING
+══════════════════════════════════════════════════════ -->
+<section class="section-pricing" id="pricing" aria-labelledby="pricing-h2">
+  <div class="color-block-mint reveal">
+    <div class="pricing-header">
+      <div class="eyebrow" style="margin-bottom:16px">Pricing</div>
+      <h2 id="pricing-h2">Build the Right Solution<br>for Your Organization.</h2>
+    </div>
+    <div class="pricing-steps-nav" aria-label="Pricing steps">
+      <div class="pricing-step-label active" data-step-label="1"><div class="num">1</div> Choose Products</div>
+      <div class="pricing-divider"></div>
+      <div class="pricing-step-label" data-step-label="2"><div class="num">2</div> Organization Size</div>
+      <div class="pricing-divider"></div>
+      <div class="pricing-step-label" data-step-label="3"><div class="num">3</div> Your Recommendation</div>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="pricing-step active" data-step="1">
+      <h3>Which products does your team need?</h3>
+      <div class="product-checkboxes">
+        <div class="product-check-item selected" data-product="Vessel Inspection">
+          <div class="check-box"></div>
+          <div>
+            <div class="check-info-name">Vessel Inspection</div>
+            <div class="check-info-desc">Digital checklists, offline support</div>
+          </div>
+        </div>
+        <div class="product-check-item selected" data-product="Bunker Quantity Survey">
+          <div class="check-box"></div>
+          <div>
+            <div class="check-info-name">Bunker Quantity Survey</div>
+            <div class="check-info-desc">Fuel verification and reporting</div>
+          </div>
+        </div>
+        <div class="product-check-item" data-product="Vessel Condition Survey">
+          <div class="check-box"></div>
+          <div>
+            <div class="check-info-name">Vessel Condition Survey</div>
+            <div class="check-info-desc">Condition capture and reports</div>
+          </div>
+        </div>
+        <div class="product-check-item" data-product="Global Sanctions">
+          <div class="check-box"></div>
+          <div>
+            <div class="check-info-name">Global Sanctions</div>
+            <div class="check-info-desc">Real-time sanctions screening</div>
+          </div>
+        </div>
+      </div>
+      <div class="pricing-nav">
+        <button class="btn-primary" onclick="pricingNext()">Next: Choose Size →</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="pricing-step" data-step="2">
+      <h3>What is your organization's fleet size?</h3>
+      <div class="size-options">
+        <div class="size-option" data-size="Small Fleet">
+          <div class="size-option-name">Small Fleet</div>
+          <div class="size-option-desc">Up to 10 vessels</div>
+        </div>
+        <div class="size-option selected" data-size="Growing Fleet">
+          <div class="size-option-name">Growing Fleet</div>
+          <div class="size-option-desc">11–50 vessels</div>
+        </div>
+        <div class="size-option" data-size="Enterprise">
+          <div class="size-option-name">Enterprise</div>
+          <div class="size-option-desc">50+ vessels or multi-port</div>
+        </div>
+      </div>
+      <div class="pricing-nav">
+        <button class="btn-secondary" onclick="pricingPrev()">← Back</button>
+        <button class="btn-primary" onclick="pricingNext()">See Recommendation →</button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="pricing-step" data-step="3">
+      <div class="pricing-recommendation">
+        <div class="rec-header">
+          <h3>Your Recommended Solution</h3>
+          <p style="font-size:14px;opacity:0.6">Based on your selections — Growing Fleet with 2 products.</p>
+        </div>
+        <div class="rec-products" id="rec-products-list"></div>
+        <div class="rec-details">
+          <div class="rec-detail">
+            <div class="rec-detail-label">Products</div>
+            <div class="rec-detail-val" id="rec-products-count">2 Applications</div>
+          </div>
+          <div class="rec-detail">
+            <div class="rec-detail-label">Support</div>
+            <div class="rec-detail-val">Priority Support + Onboarding</div>
+          </div>
+          <div class="rec-detail">
+            <div class="rec-detail-label">Implementation</div>
+            <div class="rec-detail-val">Guided Setup Included</div>
+          </div>
+        </div>
+        <div class="rec-price">Custom pricing based on your fleet size and selected products. Talk to our team for an exact quote.</div>
+        <div class="rec-actions">
+          <a href="#cta" class="btn-primary">Talk to Sales</a>
+          <a href="#cta" class="btn-secondary">Start Free Trial</a>
+        </div>
+      </div>
+      <div class="pricing-nav">
+        <button class="btn-secondary" onclick="pricingPrev()">← Start Over</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+  11. FAQ
+══════════════════════════════════════════════════════ -->
+<section class="section-faq" id="faq" aria-labelledby="faq-h2">
+  <div class="faq-inner">
+    <div class="faq-header reveal">
+      <div class="eyebrow" style="margin-bottom:16px">Questions, Answered</div>
+      <h2 id="faq-h2">Everything You Need to Know.</h2>
+    </div>
+    <div class="faq-layout reveal">
+      <div class="faq-categories" role="list" aria-label="FAQ categories">
+        <button class="faq-cat-btn active" data-category="getting-started" role="listitem">Getting Started</button>
+        <button class="faq-cat-btn" data-category="products" role="listitem">Products</button>
+        <button class="faq-cat-btn" data-category="security" role="listitem">Security</button>
+        <button class="faq-cat-btn" data-category="pricing" role="listitem">Pricing</button>
+        <button class="faq-cat-btn" data-category="implementation" role="listitem">Implementation</button>
+        <button class="faq-cat-btn" data-category="support" role="listitem">Support</button>
+      </div>
+      <div class="faq-list" id="faq-list" role="list">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+  12. FINAL CTA
+══════════════════════════════════════════════════════ -->
+<section class="section-cta" id="cta" aria-labelledby="cta-h2">
+  <div class="color-block-ink reveal">
+    <div class="eyebrow" style="margin-bottom:24px;color:white;opacity:0.4">Ready to Explore?</div>
+    <h2 id="cta-h2">Start with One Product.<br>Grow Into a Connected<br>Maritime Ecosystem.</h2>
+    <p>Explore every application with a 90-day free trial or speak with our team to find the right solution for your organization.</p>
+    <div class="cta-btns">
+      <a href="#products" class="btn-inverse">Explore Products</a>
+      <a href="#" class="btn-ghost-inverse">Book Demo</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+  13. FOOTER
+══════════════════════════════════════════════════════ -->
+<footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="assets/MC360logo.png" alt="MC360 logo" width="28" height="28" style="border-radius: 10px; object-fit: contain;" />
+          MC360
+        </div>
+        <p class="footer-tagline">Purpose-built maritime applications for the world's leading fleet operators.</p>
+        <div class="footer-socials" aria-label="Social links">
+          <a href="#" class="social-btn" aria-label="LinkedIn">in</a>
+          <a href="#" class="social-btn" aria-label="Twitter">𝕏</a>
+          <a href="#" class="social-btn" aria-label="YouTube">▶</a>
+        </div>
+        <div class="footer-newsletter" style="margin-top:20px">
+          <div style="font-size:12px;font-weight:600;opacity:0.5;margin-bottom:8px;letter-spacing:0.04em;text-transform:uppercase">Newsletter</div>
+          <div class="newsletter-form">
+            <input type="email" class="newsletter-input" placeholder="your@email.com" aria-label="Email for newsletter">
+            <button class="newsletter-btn">Subscribe</button>
+          </div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Products</h4>
+        <a href="#products">Bunker Quantity Survey</a>
+        <a href="#products">Vessel Condition Survey</a>
+        <a href="#products">Vessel Inspection</a>
+        <a href="#products">Global Sanctions</a>
+        <a href="#products">Compare Products</a>
+      </div>
+      <div class="footer-col">
+        <h4>Solutions</h4>
+        <a href="#ops">Fleet Management</a>
+        <a href="#ops">Port Authorities</a>
+        <a href="#ops">Ship Owners</a>
+        <a href="#ops">Chartering</a>
+        <a href="#ops">Terminal Operators</a>
+      </div>
+      <div class="footer-col">
+        <h4>Industries</h4>
+        <a href="#">Bulk Carriers</a>
+        <a href="#">Tankers</a>
+        <a href="#">Container Vessels</a>
+        <a href="#">Offshore</a>
+        <a href="#">Ports & Terminals</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Documentation</a>
+        <a href="#">API Reference</a>
+        <a href="#">Case Studies</a>
+        <a href="#">Blog</a>
+        <a href="#">Webinars</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Careers</a>
+        <a href="#">Press</a>
+        <a href="#cta">Contact</a>
+        <a href="#cta">Book Demo</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Maritime Connect 360. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Settings</a>
+        <a href="#">Security</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════════════
+  JAVASCRIPT
+══════════════════════════════════════════════════════ -->
+<script>
+/* ─── NAV MEGA MENU ──────────────────────────────────────────────────────── */
+const navProductsItem = document.getElementById('nav-products');
+const navLink = navProductsItem.querySelector('.nav-link');
+
+navLink.addEventListener('click', () => {
+  navProductsItem.classList.toggle('open');
+  navLink.setAttribute('aria-expanded', navProductsItem.classList.contains('open'));
+});
+
+navLink.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navLink.click(); }
+  if (e.key === 'Escape') { navProductsItem.classList.remove('open'); }
+});
+
+document.addEventListener('click', e => {
+  if (!navProductsItem.contains(e.target)) navProductsItem.classList.remove('open');
+});
+
+/* ─── MOBILE NAV ─────────────────────────────────────────────────────────── */
+const toggle = document.querySelector('.nav-toggle');
+const mobileNav = document.getElementById('nav-mobile');
+let mobileOpen = false;
+
+toggle.addEventListener('click', () => {
+  mobileOpen = !mobileOpen;
+  mobileNav.classList.toggle('open', mobileOpen);
+  mobileNav.setAttribute('aria-hidden', !mobileOpen);
+  toggle.setAttribute('aria-label', mobileOpen ? 'Close menu' : 'Open menu');
+});
+
+mobileNav.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    mobileOpen = false;
+    mobileNav.classList.remove('open');
+  });
+});
+
+/* ─── SCROLL SPY NAV ─────────────────────────────────────────────────────── */
+const nav = document.querySelector('.nav');
+window.addEventListener('scroll', () => {
+  nav.style.borderBottomColor = window.scrollY > 10 ? 'var(--hairline)' : 'transparent';
+}, { passive: true });
+
+/* ─── SMOOTH SCROLL ──────────────────────────────────────────────────────── */
+function scrollTo(id) {
+  const el = document.querySelector(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ─── PRODUCT PREVIEW TABS ───────────────────────────────────────────────── */
+const tabs = document.querySelectorAll('.preview-tab');
+const panels = document.querySelectorAll('.preview-panel');
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    const target = tab.dataset.tab;
+    tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+    panels.forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    tab.setAttribute('aria-selected', 'true');
+    document.querySelector(`[data-panel="${target}"]`).classList.add('active');
+  });
+  tab.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tab.click(); }
+  });
+});
+
+/* ─── PRICING WIZARD ─────────────────────────────────────────────────────── */
+let pricingStep = 1;
+const selectedProducts = new Set(['Vessel Inspection', 'Bunker Quantity Survey']);
+let selectedSize = 'Growing Fleet';
+
+const pricingStepLabels = document.querySelectorAll('[data-step-label]');
+const pricingStepPanels = document.querySelectorAll('[data-step]');
+
+function updatePricingUI() {
+  pricingStepLabels.forEach(l => l.classList.toggle('active', +l.dataset.stepLabel === pricingStep));
+  pricingStepPanels.forEach(p => p.classList.toggle('active', +p.dataset.step === pricingStep));
+}
+
+function pricingNext() {
+  if (pricingStep < 3) {
+    pricingStep++;
+    if (pricingStep === 3) buildRecommendation();
+    updatePricingUI();
+  }
+}
+
+function pricingPrev() {
+  if (pricingStep > 1) { pricingStep--; updatePricingUI(); }
+  else { pricingStep = 1; updatePricingUI(); }
+}
+
+// Product checkboxes
+document.querySelectorAll('.product-check-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const prod = item.dataset.product;
+    item.classList.toggle('selected');
+    if (item.classList.contains('selected')) selectedProducts.add(prod);
+    else selectedProducts.delete(prod);
+  });
+});
+
+// Size options
+document.querySelectorAll('.size-option').forEach(opt => {
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('.size-option').forEach(o => o.classList.remove('selected'));
+    opt.classList.add('selected');
+    selectedSize = opt.dataset.size;
+  });
+});
+
+function buildRecommendation() {
+  const list = document.getElementById('rec-products-list');
+  const count = document.getElementById('rec-products-count');
+  list.innerHTML = '';
+  const colors = { 'Vessel Inspection': 'var(--block-mint)', 'Bunker Quantity Survey': 'var(--block-lime)', 'Vessel Condition Survey': 'var(--block-lilac)', 'Global Sanctions': 'var(--block-coral)' };
+  selectedProducts.forEach(p => {
+    const badge = document.createElement('span');
+    badge.className = 'rec-product-badge';
+    badge.style.background = colors[p] || 'var(--surface-soft)';
+    badge.textContent = p;
+    list.appendChild(badge);
+  });
+  count.textContent = `${selectedProducts.size} Application${selectedProducts.size !== 1 ? 's' : ''} · ${selectedSize}`;
+}
+
+/* ─── FAQ ────────────────────────────────────────────────────────────────── */
+const faqData = {
+  'getting-started': [
+    { q: 'How do I start a free trial?', a: 'Click "Start Free Trial" from any page. You\'ll receive immediate access to all four products for 90 days — no credit card required.' },
+    { q: 'Do I need to install anything?', a: 'No installation needed for web access. Our mobile apps for iOS and Android are available for field teams who need offline inspection capability.' },
+    { q: 'Can I start with just one product?', a: 'Absolutely. You can activate a single product and expand to additional applications at any time. All products share the same platform and credentials.' },
+  ],
+  'products': [
+    { q: 'What is the difference between BQS and VCS?', a: 'BQS (Bunker Quantity Survey) focuses specifically on fuel delivery measurement and verification. VCS (Vessel Condition Survey) captures the overall condition of a vessel across all systems and compartments.' },
+    { q: 'Does Vessel Inspection work offline?', a: 'Yes. The inspection app is fully functional offline. Inspectors can complete checklists, capture photos, and add notes without connectivity. All data syncs automatically when reconnected.' },
+    { q: 'How current are the Global Sanctions watchlists?', a: 'Sanction lists are updated in real time. We monitor OFAC, EU, UN, UK, and 47+ additional lists and push updates within minutes of publication.' },
+  ],
+  'security': [
+    { q: 'Is Maritime Connect 360 SOC 2 certified?', a: 'Yes. Maritime Connect 360 is SOC 2 Type II certified. Our security posture is independently audited annually and available to enterprise customers upon request.' },
+    { q: 'Where is my data stored?', a: 'Data is stored in ISO 27001 certified data centres with regional hosting options available for EU, APAC, and US regions to meet data residency requirements.' },
+    { q: 'Does the platform support SSO?', a: 'Yes. We support SAML 2.0 single sign-on with major identity providers including Okta, Azure AD, Google Workspace, and others.' },
+  ],
+  'pricing': [
+    { q: 'Is there a free trial?', a: 'Yes — a 90-day free trial with full access to all selected products, unlimited users, and dedicated onboarding support. No credit card required.' },
+    { q: 'How does pricing work?', a: 'Pricing is based on the products you select and your fleet size. We don\'t publish standard rates because every operation is different. Use our pricing builder or talk to our team.' },
+    { q: 'Do you offer annual contracts?', a: 'Yes, and annual contracts include a discount versus monthly billing. Enterprise agreements are also available with custom SLAs and dedicated support.' },
+  ],
+  'implementation': [
+    { q: 'How long does implementation take?', a: 'Most customers are live within 2–4 weeks. Enterprise rollouts with data migration and integrations typically take 4–8 weeks, with a dedicated implementation manager assigned.' },
+    { q: 'Do you help with data migration?', a: 'Yes. Our implementation team supports data migration from existing systems including Excel, legacy survey tools, and other maritime software.' },
+    { q: 'What integrations are available?', a: 'We offer RESTful APIs and webhooks that connect to ERP systems, fleet management software, chartering platforms, and accounting tools. We also offer pre-built integrations for common maritime systems.' },
+  ],
+  'support': [
+    { q: 'What support is included?', a: 'All plans include email and in-app support. Growing Fleet and Enterprise plans include priority support with faster response times and access to a dedicated customer success manager.' },
+    { q: 'Do you offer training?', a: 'Yes. All plans include role-based onboarding training. Enterprise plans include live training sessions, recorded materials, and ongoing access to our learning portal.' },
+    { q: 'What is your uptime SLA?', a: 'We guarantee 99.9% uptime for all production environments, with status available at our status page. Enterprise customers receive enhanced SLAs upon request.' },
+  ],
+};
+
+let activeFaqCategory = 'getting-started';
+
+function renderFaq(category) {
+  const list = document.getElementById('faq-list');
+  const items = faqData[category] || [];
+  list.innerHTML = items.map((item, i) => `
+    <div class="faq-item" role="listitem">
+      <div class="faq-q" role="button" tabindex="0" aria-expanded="false" onclick="toggleFaq(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
+        <span>${item.q}</span>
+        <div class="faq-icon" aria-hidden="true">+</div>
+      </div>
+      <div class="faq-a" role="region">${item.a}</div>
+    </div>
+  `).join('');
+}
+
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => {
+    i.classList.remove('open');
+    i.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+  }
+}
+
+document.querySelectorAll('.faq-cat-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.faq-cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFaqCategory = btn.dataset.category;
+    renderFaq(activeFaqCategory);
+  });
+});
+
+renderFaq('getting-started');
+
+/* ─── SCROLL REVEAL ──────────────────────────────────────────────────────── */
+const revealEls = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      revealObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+revealEls.forEach(el => revealObserver.observe(el));
+
+/* ─── HERO FLOATING LOGOS – click jumps to product ──────────────────────── */
+document.querySelectorAll('.float-logo').forEach(logo => {
+  logo.addEventListener('click', () => {
+    document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+  });
+  logo.setAttribute('tabindex', '0');
+  logo.setAttribute('role', 'button');
+  logo.addEventListener('keydown', e => { if (e.key === 'Enter') logo.click(); });
+});
+
+/* ─── NEWSLETTER FORM ────────────────────────────────────────────────────── */
+document.querySelector('.newsletter-btn').addEventListener('click', function() {
+  const input = document.querySelector('.newsletter-input');
+  if (input.value && input.value.includes('@')) {
+    this.textContent = '✓ Subscribed';
+    this.style.background = 'var(--semantic-success)';
+    input.disabled = true;
+    setTimeout(() => {
+      this.textContent = 'Subscribe';
+      this.style.background = '';
+      input.disabled = false;
+      input.value = '';
+    }, 3000);
+  } else {
+    input.style.borderColor = '#e55';
+    input.focus();
+    setTimeout(() => input.style.borderColor = '', 1500);
+  }
+});
+
+/* ─── ACTIVE NAV LINK on scroll ──────────────────────────────────────────── */
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+}, { passive: true });
+
+/* ─── STAGGER children of grid on reveal ────────────────────────────────── */
+const staggerObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const children = entry.target.querySelectorAll('.challenge-card, .ops-card, .platform-card, .case-card');
+      children.forEach((child, i) => {
+        child.style.transitionDelay = `${i * 60}ms`;
+        child.style.opacity = '1';
+        child.style.transform = 'none';
+      });
+      staggerObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.05 });
+
+document.querySelectorAll('.challenges-grid, .ops-grid, .platform-grid, .case-studies').forEach(grid => {
+  const cards = grid.querySelectorAll('.challenge-card, .ops-card, .platform-card, .case-card');
+  cards.forEach(c => { c.style.opacity = '0'; c.style.transform = 'translateY(16px)'; c.style.transition = 'opacity 0.4s, transform 0.4s'; });
+  staggerObserver.observe(grid);
+});
+</script>
+</body>
+</html>
